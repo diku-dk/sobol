@@ -40,6 +40,8 @@ $ futharki
 > s.sobol 3
 ```
 
+## References
+
 [1] Troels Henriksen, Martin Elsman, and Cosmin E. Oancea. __Modular
 Acceleration: Tricky Cases of Functional High-Performance
 Computing__. In _Proceedings of the 6th ACM SIGPLAN workshop on
