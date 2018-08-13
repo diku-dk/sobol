@@ -19,6 +19,10 @@ _1/sqrt(n)_.
 
 For a discussion of the implementation, please consult [1].
 
+## Statistics
+
+[![Build Status](https://travis-ci.org/diku-dk/sobol.svg?branch=master)](https://travis-ci.org/diku-dk/sobol)
+
 ## Installation
 
 ```
