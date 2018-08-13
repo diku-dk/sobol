@@ -1,7 +1,6 @@
 -- | Quasi-random Sobol number generation.
 
 import "/futlib/math"
-import "/futlib/monoid"
 
 module type sobol_dir = {
   val n: i32
