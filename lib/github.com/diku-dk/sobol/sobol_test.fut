@@ -43,3 +43,12 @@ entry test_recurrent (n:i32) : [2]f64 =
   let v = if n <= 1 then sobol.independent n
           else sobol.recurrent n (sobol.independent (n-1))
   in map (\x -> f64.u32 x / sobol.norm) v
+
+-- ==
+-- entry: test_sobol
+-- input { 3 }
+-- output { [[0.000000f64, 0.000000f64], [0.500000f64, 0.500000f64], [0.750000f64, 0.250000f64]] }
+-- input { 4 }
+-- output { [[0.000000f64, 0.000000f64], [0.500000f64, 0.500000f64], [0.750000f64, 0.250000f64], [0.250000f64, 0.750000f64]] }
+
+entry test_sobol (n:i32) : [n][2]f64 = sobol.sobol n
