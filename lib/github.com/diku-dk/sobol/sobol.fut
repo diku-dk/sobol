@@ -105,6 +105,7 @@ module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
 
   let sobol (n:i32) : [n][D]f64 =
     stream_map (\[c] (xs: [c]i32): [c][D]f64 ->
-                  unsafe chunk xs[0] c)
+                if c == 0 then ([]:[0][D]f64)
+                else unsafe chunk xs[0] c)
                (iota n)
 }
