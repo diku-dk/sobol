@@ -98,14 +98,14 @@ module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
                        if k==0 then sob_beg
                        else recM (k+offs-1))
                     (iota n)
-    let vct_ints = scan (\x y -> map2 (^) x y)
-                        (replicate D 0u32) contrbs
+    let vct_ints = transpose contrbs
+                   |> map (scan (^) 0)
+                   |> transpose
     in map (\xs -> map (\x -> f64.u32 x/norm) xs)
            vct_ints
 
   let sobol (n:i32) : [n][D]f64 =
     stream_map (\[c] (xs: [c]i32): [c][D]f64 ->
-                if c == 0 then ([]:[0][D]f64)
-                else unsafe chunk xs[0] c)
+                chunk (if c == 0 then 0 else unsafe xs[0]) c)
                (iota n)
 }
