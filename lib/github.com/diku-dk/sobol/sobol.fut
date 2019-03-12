@@ -1,7 +1,5 @@
 -- | Quasi-random Sobol number generation.
 
-import "/futlib/math"
-
 module type sobol_dir = {
   val n: i32
   val a: [n]u32
