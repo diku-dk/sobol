@@ -19,10 +19,6 @@ _1/sqrt(n)_.
 
 For a discussion of the implementation, please consult [1].
 
-## Statistics
-
-
-
 ## Installation
 
 ```
