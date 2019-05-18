@@ -1,4 +1,4 @@
-# Sobol library for Futhark
+# Sobol library for Futhark [![Build Status](https://travis-ci.org/diku-dk/sobol.svg?branch=master)](https://travis-ci.org/diku-dk/sobol) [![Documentation](https://futhark-lang.org/pkgs/github.com/diku-dk/sobol/status.svg)](https://futhark-lang.org/pkgs/github.com/diku-dk/sobol/latest/)
 
 This library is a convenient and modular library for efficiently
 generating large quantities of quasi-random numbers (in multiple
@@ -21,7 +21,7 @@ For a discussion of the implementation, please consult [1].
 
 ## Statistics
 
-[![Build Status](https://travis-ci.org/diku-dk/sobol.svg?branch=master)](https://travis-ci.org/diku-dk/sobol)
+
 
 ## Installation
 
@@ -33,11 +33,12 @@ $ futhark-pkg sync
 ## Usage example
 
 ```
-$ futharki
+$ futhark repl
 > import "lib/github.com/diku-dk/sobol/sobol-dir-50"
 > import "lib/github.com/diku-dk/sobol/sobol"
 > module s = Sobol sobol_dir { let D = 2 }
 > s.sobol 3
+[[0.0f64, 0.0f64], [0.5f64, 0.5f64], [0.75f64, 0.25f64]]
 ```
 
 ## References
