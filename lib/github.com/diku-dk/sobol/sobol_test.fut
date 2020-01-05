@@ -24,14 +24,14 @@ entry sobol_pi (n:i32) : f64 =
 -- input { 3 }
 -- output { [[0.000000f64, 0.000000f64], [0.500000f64, 0.500000f64], [0.750000f64, 0.250000f64]] }
 
-entry test_chunk (n:i32) : [n][2]f64 = sobol.chunk 0 n
+entry test_chunk (n:i32) : [n][sobol.D]f64 = sobol.chunk 0 n
 
 -- ==
 -- entry: test_independent
 -- input { 2 }
 -- output { [0.750000f64, 0.250000f64] }
 
-entry test_independent (n:i32) : [2]f64 =
+entry test_independent (n:i32) : [sobol.D]f64 =
   map (\x -> f64.u32 x / sobol.norm) (sobol.independent n)
 
 -- ==
@@ -39,7 +39,7 @@ entry test_independent (n:i32) : [2]f64 =
 -- input { 2 }
 -- output { [0.750000f64, 0.250000f64] }
 
-entry test_recurrent (n:i32) : [2]f64 =
+entry test_recurrent (n:i32) : [sobol.D]f64 =
   let v = if n <= 1 then sobol.independent n
           else sobol.recurrent n (sobol.independent (n-1))
   in map (\x -> f64.u32 x / sobol.norm) v
@@ -51,4 +51,4 @@ entry test_recurrent (n:i32) : [2]f64 =
 -- input { 4 }
 -- output { [[0.000000f64, 0.000000f64], [0.500000f64, 0.500000f64], [0.750000f64, 0.250000f64], [0.250000f64, 0.750000f64]] }
 
-entry test_sobol (n:i32) : [n][2]f64 = sobol.sobol n
+entry test_sobol (n:i32) : [n][sobol.D]f64 = sobol.sobol n

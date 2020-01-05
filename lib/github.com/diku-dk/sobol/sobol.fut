@@ -2,9 +2,10 @@
 
 module type sobol_dir = {
   val n: i32
+  val k: i32
   val a: [n]u32
   val s: [n]i32
-  val m: [n][]u32
+  val m: [n][k]u32
 }
 
 module type sobol = {
