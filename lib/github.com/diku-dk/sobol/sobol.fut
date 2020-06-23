@@ -96,9 +96,8 @@ module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
     let contrbs = map (\(k:i32): [D]u32 ->
                        if k==0 then sob_beg
                        else recM (k+offs-1))
-                    (iota n)
-    let vct_ints = scan (\x y -> map2 (^) x y)
-                        (replicate D 0u32) contrbs
+                      (iota n)
+    let vct_ints = scan (map2 (^)) (replicate D 0u32) contrbs
     in map (\xs -> map (\x -> f64.u32 x/norm) xs)
            vct_ints
 
