@@ -5,14 +5,14 @@
 -- https://github.com/diku-dk/sobol-futhark
 
 module sobol_dir : {
-  val n : i32
-  val k : i32
+  val n : i64
+  val k : i64
   val m : [n][k]u32
   val a : [n]u32
   val s : [n]i32
 } = {
-  let n : i32 = 1000
-  let k : i32 = 13
+  let n : i64 = 1000
+  let k : i64 = 13
   let m : [n][k]u32 =
     [[1u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32],
      [1u32, 3u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32, 0u32],

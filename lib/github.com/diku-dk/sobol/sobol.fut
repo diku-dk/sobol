@@ -1,8 +1,8 @@
 -- | Quasi-random Sobol number generation.
 
 module type sobol_dir = {
-  val n: i32
-  val k: i32
+  val n: i64
+  val k: i64
   val a: [n]u32
   val s: [n]i32
   val m: [n][k]u32
@@ -10,7 +10,7 @@ module type sobol_dir = {
 
 module type sobol = {
   -- | Dimensionality of sequence.
-  val D : i32
+  val D : i64
   -- | The value `2**32`.
   val norm : f64
   -- | `independent i` returns the `i`'th sobol vector (in u32)
@@ -20,13 +20,13 @@ module type sobol = {
   val recurrent : i32 -> [D]u32 -> [D]u32
   -- | `chunk i n` returns the array `[v(i),...,v(i+n-1)]` of sobol
   -- vectors where `v(j)` is the `j`'th D-dimensional sobol vector
-  val chunk : i32 -> (n:i32) -> [n][D]f64
+  val chunk : i32 -> (n:i64) -> [n][D]f64
   --| `sobol n` generates `n` `D`-dimensional pointwise normalised
   -- sobol vectors.
-  val sobol : (n:i32) -> [n][D]f64
+  val sobol : (n:i64) -> [n][D]f64
 }
 
-module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
+module Sobol (DM: sobol_dir) (X: { val D : i64 }) : sobol = {
   let D = X.D
 
   -- Compute direction vectors. In general, some work can be saved if
@@ -35,32 +35,32 @@ module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
   -- upto N = 2^L, where L=32 (i.e., the maximum number of bits
   -- needed).
 
-  let L = 32i32
+  let L = 32i64
 
   -- direction vector for dimension j
-  let dirvec (j:i32) : [L]u32 =
+  let dirvec (j:i64) : [L]u32 =
     if j == 0 then
-       map (\i -> 1u32 << (u32.i32 L-u32.i32 (i+1))) (iota L)
+       map (\i -> 1u32 << (u32.i64 L-u32.i64 (i+1))) (iota L)
     else
-       let s = DM.s[j-1]
+       let s = i64.i32 DM.s[j-1]
        let a = DM.a[j-1]
        let V = map (\i -> if i >= s then 0u32
-                          else DM.m[j-1,i] << (u32.i32 L-u32.i32(i+1))
+                          else DM.m[j-1,i] << (u32.i64 L-u32.i64(i+1))
                    ) (iota L)
        in loop (V) for i' < L-s do
             let i = i'+s
             let v = V[i-s]
-            let vi0 = v ^ (v >> (u32.i32 s))
+            let vi0 = v ^ (v >> (u32.i64 s))
             let vi =
               loop vi = vi0 for k' < s-1 do
                 let k = k'+1
-                in vi ^ (((a >> u32.i32(s-1-k)) & 1u32) * V[i-k])
+                in vi ^ (((a >> u32.i64(s-1-k)) & 1u32) * V[i-k])
             in V with [i] = vi
 
   let index_of_least_significant_0 (x:i32) : i32 =
     loop i = 0 while i < 32 && ((x>>i)&1) != 0 do i + 1
 
-  let norm = 2.0 f64.** f64.i32 L
+  let norm = 2.0 f64.** f64.i64 L
 
   let grayCode (x: i32): i32 = (x >> 1) ^ x
 
@@ -77,7 +77,7 @@ module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
     map2 (recSob (i-1)) dirvecs xs
 
   let indSob (n:i32) (dirvec:[L]u32) : u32 =
-    let reldv_vals = map2 (\dv i -> if testBit (grayCode n) i then dv
+    let reldv_vals = map2 (\dv i -> if testBit (grayCode n) (i32.i64 i) then dv
                                     else 0u32)
                          dirvec (iota L)
     in reduce (^) 0u32 reldv_vals
@@ -91,18 +91,18 @@ module Sobol (DM: sobol_dir) (X: { val D : i32 }) : sobol = {
     in map (\row -> row[bit]) dirvecs
 
   -- computes sobol numbers: offs,..,offs+n-1
-  let chunk (offs:i32) (n:i32) : [n][D]f64 =
+  let chunk (offs:i32) (n:i64) : [n][D]f64 =
     let sob_beg = independent offs
-    let contrbs = map (\(k:i32): [D]u32 ->
+    let contrbs = map (\k: [D]u32 ->
                        if k==0 then sob_beg
-                       else recM (k+offs-1))
+                       else recM (i32.i64 k+offs-1))
                       (iota n)
     let vct_ints = scan (map2 (^)) (replicate D 0u32) contrbs
     in map (\xs -> map (\x -> f64.u32 x/norm) xs)
            vct_ints
 
-  let sobol (n:i32) : [n][D]f64 =
-    map_stream (\c (xs: [c]i32): [c][D]f64 ->
-                chunk (if c == 0 then 0 else xs[0]) c)
+  let sobol (n:i64) : [n][D]f64 =
+    map_stream (\c (xs: [c]i64): [c][D]f64 ->
+                chunk (if c == 0 then 0 else i32.i64 xs[0]) c)
                (iota n)
 }
