@@ -1,4 +1,4 @@
-# Sobol library for Futhark [![Build Status](https://travis-ci.org/diku-dk/sobol.svg?branch=master)](https://travis-ci.org/diku-dk/sobol) [![Documentation](https://futhark-lang.org/pkgs/github.com/diku-dk/sobol/status.svg)](https://futhark-lang.org/pkgs/github.com/diku-dk/sobol/latest/)
+# Sobol library for Futhark [![CI](https://github.com/diku-dk/sobol/workflows/CI/badge.svg)](https://github.com/diku-dk/sobol/actions) [![Documentation](https://futhark-lang.org/pkgs/github.com/diku-dk/sobol/status.svg)](https://futhark-lang.org/pkgs/github.com/diku-dk/sobol/latest/)
 
 This library is a convenient and modular library for efficiently
 generating large quantities of quasi-random numbers (in multiple
