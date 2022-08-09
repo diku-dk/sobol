@@ -102,7 +102,5 @@ module Sobol (DM: sobol_dir) (X: { val D : i64 }) : sobol = {
            vct_ints
 
   let sobol (n:i64) : [n][D]f64 =
-    map_stream (\c (xs: [c]i64): [c][D]f64 ->
-                chunk (if c == 0 then 0 else i32.i64 xs[0]) c)
-               (iota n)
+    tabulate n (i32.i64 >-> independent >-> map f64.u32 >-> map (/norm))
 }
